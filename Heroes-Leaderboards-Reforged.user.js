@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Heroes Leaderboards Reforged
 // @namespace    mailto:elitesparkle.gaming@gmail.com
-// @version      1.0
-// @description  Improve the official Grand Master Leaderboards for Heroes of the Storm. Fix headers for Melee Assassin and Healer. Add columns for Win Rate and Main Role.
+// @version      1.1
+// @description  Improve the Grand Master Leaderboards for Heroes of the Storm. Fix headers for Melee Assassin and Healer. Add columns for Win Rate and Main Role.
 // @author       Elitesparkle
 // @license      MIT License
 // @match        https://heroesofthestorm.blizzard.com/*/leaderboards/*/*/*/
@@ -14,27 +14,29 @@
     'use strict';
 
     window.addEventListener("load", function () {
-        let table_header = document.querySelectorAll("th");
+        let table = document.querySelector("table");
+        let game_mode = document.URL.split("/")[5];
 
         let win_rate_column = 4;
         let role_column = 7;
-
-        let healer = table_header[9].innerHTML;
-        let melee_assassin = table_header[10].innerHTML;
-
-        table_header[9].innerHTML = melee_assassin;
-        table_header[10].innerHTML = healer;
-
-        let games = table_header[4];
-        let wins = table_header[5];
-        let win_rate = "Win Rate";
-
-        let table = document.querySelector("table");
+        let last_column;
 
         let cell = table.rows[0].insertCell(win_rate_column);
         cell.innerText = "Win Rate";
         cell.style.textAlign = "center";
         cell.style.fontWeight = "bold";
+
+        if (game_mode == "storm") {
+            let healer = table.rows[0].cells[10].innerHTML;
+            let melee_assassin = table.rows[0].cells[11].innerHTML;
+            table.rows[0].cells[10].innerHTML = melee_assassin;
+            table.rows[0].cells[11].innerHTML = healer;
+
+            last_column = 12;
+        }
+        else {
+            last_column = 10;
+        }
 
         for (let i = 1; i < table.rows.length; i++) {
             let wins = table.rows[i].cells[5].innerText;
@@ -52,16 +54,16 @@
                 cell.style.color = "#00FF00"; // Green
             }
             else if (win_rate >= 50) {
-                cell.style.color = "#FFFF00"; // Lime
+                cell.style.color = "#FFFF00"; // Yellow
             }
             else {
                 cell.style.color = "#FF0000"; // Red
             }
 
-            let max_preference = parseFloat(table.rows[i].cells[12].innerText);
-            let role_preference = table.rows[0].cells[12].innerHTML;
+            let max_preference = parseFloat(table.rows[i].cells[last_column].innerText);
+            let role_preference = table.rows[0].cells[last_column].innerHTML;
 
-            for (let j = 7; j <= 12; j++) {
+            for (let j = 7; j <= last_column; j++) {
                 let preference = parseFloat(table.rows[i].cells[j].innerText);
                 if (preference > max_preference) {
                     max_preference = preference;
