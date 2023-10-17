@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Heroes Leaderboards Reforged
 // @namespace    mailto:elitesparkle.gaming@gmail.com
-// @version      1.2
-// @description  Improve the Grand Master Leaderboards for Heroes of the Storm. Fix headers for Melee Assassin and Healer. Add columns for Win Rate and Main Role.
+// @version      1.3
+// @description  Improve the Grand Master Leaderboards for Heroes of the Storm.
 // @author       Elitesparkle
 // @license      MIT License
 // @match        https://heroesofthestorm.blizzard.com/*/leaderboards/*/*/*/
@@ -15,6 +15,44 @@
 
     window.addEventListener("load", function () {
         let table = document.querySelector("table");
+        let season_number = document.URL.split("/")[6];
+
+        let button_class = "RankingTable-button leaderboards-rankings-load btn";
+        let disabled_flag = "";
+
+        if (season_number < 2) {
+            disabled_flag = " RankingTable-button--disabled";
+        }
+
+        let previous_url = document.URL.replace(season_number, parseInt(season_number) - 1);
+        if (season_number == 12) {
+            previous_url = previous_url.replace("/storm/", "/hero/");
+        }
+
+        let previous_button = document.createElement("INPUT");
+        previous_button.setAttribute("class", button_class + disabled_flag);
+        previous_button.setAttribute("type", "button");
+        previous_button.setAttribute("value", "‹");
+        previous_button.style.fontSize = "16px";
+        previous_button.setAttribute("onclick", "location.href = '" + previous_url + "'");
+
+        let next_url = document.URL.replace(season_number, parseInt(season_number) + 1);
+        if (season_number == 11) {
+            next_url = next_url.replace("/hero/", "/storm/");
+            next_url = next_url.replace("/team/", "/storm/");
+        }
+
+        let next_button = document.createElement("INPUT");
+        next_button.setAttribute("class", button_class);
+        next_button.setAttribute("type", "button");
+        next_button.setAttribute("value", "›");
+        next_button.style.fontSize = "16px";
+        next_button.setAttribute("onclick", "location.href = '" + next_url + "'");
+
+        let div = document.querySelectorAll("div")[63];
+        div.appendChild(previous_button);
+        div.appendChild (document.createTextNode(" "));
+        div.appendChild(next_button);
 
         if (table) {
             let language = document.URL.split("/")[3];
