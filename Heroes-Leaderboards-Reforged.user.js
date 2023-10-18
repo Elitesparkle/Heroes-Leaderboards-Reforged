@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Heroes Leaderboards Reforged
 // @namespace    mailto:elitesparkle.gaming@gmail.com
-// @version      1.3
+// @version      1.4
 // @description  Improve the Grand Master Leaderboards for Heroes of the Storm.
 // @author       Elitesparkle
 // @license      MIT License
@@ -20,13 +20,21 @@
         let button_class = "RankingTable-button leaderboards-rankings-load btn";
         let disabled_flag = "";
 
-        if (season_number < 2) {
+        let previous_number = parseInt(season_number) - 1;
+
+        if (previous_number < 1) {
+            previous_number = 0;
             disabled_flag = " RankingTable-button--disabled";
         }
 
-        let previous_url = document.URL.replace(season_number, parseInt(season_number) - 1);
-        if (season_number == 12) {
+        let previous_url = document.URL.replace(season_number, previous_number);
+
+        if (previous_number <= 11) {
             previous_url = previous_url.replace("/storm/", "/hero/");
+        }
+        else
+        {
+            previous_url = previous_url.replace("/hero/", "/storm/").replace("/team/", "/storm/");
         }
 
         let previous_button = document.createElement("INPUT");
@@ -36,10 +44,15 @@
         previous_button.style.fontSize = "16px";
         previous_button.setAttribute("onclick", "location.href = '" + previous_url + "'");
 
-        let next_url = document.URL.replace(season_number, parseInt(season_number) + 1);
-        if (season_number == 11) {
-            next_url = next_url.replace("/hero/", "/storm/");
-            next_url = next_url.replace("/team/", "/storm/");
+        let next_number = parseInt(season_number) + 1;
+        let next_url = document.URL.replace(season_number, next_number);
+
+        if (next_number <= 11) {
+            next_url = next_url.replace("/storm/", "/hero/");
+        }
+        else
+        {
+            next_url = next_url.replace("/hero/", "/storm/").replace("/team/", "/storm/");
         }
 
         let next_button = document.createElement("INPUT");
