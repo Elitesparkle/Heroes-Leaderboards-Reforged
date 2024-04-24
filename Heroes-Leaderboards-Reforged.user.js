@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Heroes Leaderboards Reforged
 // @namespace    mailto:elitesparkle.gaming@gmail.com
-// @version      1.4
+// @version      1.5
 // @description  Improve the Grand Master Leaderboards for Heroes of the Storm.
 // @author       Elitesparkle
 // @license      MIT License
@@ -40,7 +40,7 @@
         let previous_button = document.createElement("INPUT");
         previous_button.setAttribute("class", button_class + disabled_flag);
         previous_button.setAttribute("type", "button");
-        previous_button.setAttribute("value", "‹");
+        previous_button.setAttribute("value", "←");
         previous_button.style.fontSize = "16px";
         previous_button.setAttribute("onclick", "location.href = '" + previous_url + "'");
 
@@ -58,11 +58,11 @@
         let next_button = document.createElement("INPUT");
         next_button.setAttribute("class", button_class);
         next_button.setAttribute("type", "button");
-        next_button.setAttribute("value", "›");
+        next_button.setAttribute("value", "→");
         next_button.style.fontSize = "16px";
         next_button.setAttribute("onclick", "location.href = '" + next_url + "'");
 
-        let div = document.querySelectorAll("div")[63];
+        let div = document.querySelectorAll("div")[12];
         div.appendChild(previous_button);
         div.appendChild (document.createTextNode(" "));
         div.appendChild(next_button);
